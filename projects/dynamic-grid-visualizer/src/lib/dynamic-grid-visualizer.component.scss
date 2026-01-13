@@ -1,0 +1,42 @@
+:host {
+    display: block; // Ensures the custom element takes up space
+}
+
+.grid-container {
+    width: 600px;
+    height: 600px;
+    border: 2px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; // Prevents grid from spilling out during calculation
+
+    .grid-wrapper {
+        display: grid;
+        // These variables are injected via [style.--cols] in the HTML
+        grid-template-columns: repeat(var(--cols), var(--cell-size));
+        grid-template-rows: repeat(var(--rows), var(--cell-size));
+        border: 1px solid gray;
+    }
+
+    .cell {
+        width: var(--cell-size);
+        height: var(--cell-size);
+        border: 1px solid lightgray;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 8px;
+    }
+
+    .highlight-border {
+        background: purple;
+        color: white;
+    }
+
+    .highlight-diagonal {
+        background: grey;
+        color: white;
+    }
+}

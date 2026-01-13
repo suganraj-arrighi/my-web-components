@@ -1,0 +1,20 @@
+<div class="grid-container">
+    @if (gridConfig(); as config){
+        <div class="grid-wrapper" 
+             [style.--cell-size.px]="config.cellSize" 
+             [style.--cols]="config.cols">
+             
+         @for (row of createArray(config.rows); track $index; let r = $index) {
+            @for (col of createArray(config.cols); track $index; let c = $index) {
+                 <div class="cell" 
+                      [class.highlight-border]="isBorderCell(r, c, config.rows, config.cols)" 
+                      [class.highlight-diagonal]="isDiagonalCell(r, c, config.rows, config.cols)">
+                    {{r}},{{c}}   
+                 </div>
+            }
+         }
+        </div>
+    } @else {
+        <p class="placeholder">Waiting for valid grid dimensions (Rows/Cols > 0)...</p>
+    }
+</div>

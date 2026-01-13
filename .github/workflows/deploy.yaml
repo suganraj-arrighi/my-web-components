@@ -1,0 +1,73 @@
+name: CD
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-publish:
+    name: Build and Publish Libraries
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.12.0
+          cache: 'npm'
+
+      - name: Install app dependencies
+        run: npm ci
+
+      - name: Build all libraries
+        run: npm run build:all
+
+      - name: Configure npm for publishing
+        run: |
+          npm config set //npm.pkg.github.com/:_authToken ${{ secrets.GITHUB_TOKEN }}
+          npm config set @sugan:registry https://npm.pkg.github.com/
+
+      - name: Get dynamic-grid-visualizer version
+        id: dynamic_grid_version
+        uses: notiz-dev/github-action-json-property@release
+        with:
+          path: "projects/dynamic-grid-visualizer/package.json"
+          prop_path: "version"
+
+      - name: Publish dynamic-grid-visualizer to GitHub Packages
+        run: |
+          cd dist/dynamic-grid-visualizer
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get status-indicator version
+        id: status_indicator_version
+        uses: notiz-dev/github-action-json-property@release
+        with:
+          path: "projects/status-indicator/package.json"
+          prop_path: "version"
+
+      - name: Publish status-indicator to GitHub Packages
+        run: |
+          cd dist/status-indicator
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create tag for dynamic-grid-visualizer
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: rickstaa/action-create-tag@v1
+        with:
+          tag: dynamic-grid-visualizer-v${{ steps.dynamic_grid_version.outputs.prop }}
+          message: "Release dynamic-grid-visualizer v${{ steps.dynamic_grid_version.outputs.prop }}"
+
+      - name: Create tag for status-indicator
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: rickstaa/action-create-tag@v1
+        with:
+          tag: status-indicator-v${{ steps.status_indicator_version.outputs.prop }}
+          message: "Release status-indicator v${{ steps.status_indicator_version.outputs.prop }}"

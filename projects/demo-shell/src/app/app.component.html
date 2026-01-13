@@ -1,0 +1,18 @@
+<h1>Grid Visualizer Demo</h1>
+
+<div class="controls">
+  <input type="number" [formControl]="rowsControl" placeholder="Rows">
+  <input type="number" [formControl]="colsControl" placeholder="Cols">
+  <button (click)="onRender()" [disabled]="rowsControl.invalid || colsControl.invalid">
+    Render Grid
+  </button>
+</div>
+
+<hr>
+
+<lib-dynamic-grid-visualizer 
+  [rows]="confirmedRows" 
+  [cols]="confirmedCols">
+</lib-dynamic-grid-visualizer>
+
+<lib-status-indicator [status]="status"></lib-status-indicator>
