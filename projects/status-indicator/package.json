@@ -1,5 +1,5 @@
 {
-  "name": "@sugan/status-indicator",
+  "name": "@suganraj-arrighi/status-indicator",
   "version": "0.0.1",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"

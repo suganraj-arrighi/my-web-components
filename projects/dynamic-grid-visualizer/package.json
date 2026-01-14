@@ -1,5 +1,5 @@
 {
-  "name": "@sugan/dynamic-grid-visualizer",
+  "name": "@suganraj-arrighi/dynamic-grid-visualizer",
   "version": "0.0.1",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
